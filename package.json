@@ -1,0 +1,31 @@
+{
+  "name": "mqtt-aws-forwarder",
+  "version": "1.0.0",
+  "description": "MQTT things data to AWS shadow forwader",
+  "main": "mqttForwarder.js",
+  "dependencies": {
+    "aws-iot-device-sdk": "^2.2.1",
+    "moment-timezone": "^0.5.17",
+    "mqtt": "^2.15.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bakterian/mqtt-aws-forwarder.git"
+  },
+  "keywords": 
+  [
+    "mqtt",
+    "forwader",
+    "mqtt-aws"
+  ],
+  "author": "Marcin bakterian@protonmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bakterian/mqtt-aws-forwarder/issues"
+  },
+  "homepage": "https://github.com/bakterian/mqtt-aws-forwarder#readme"
+}
