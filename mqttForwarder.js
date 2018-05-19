@@ -26,29 +26,39 @@ function getDateTime()
 
 function forwardThingPub(topic, message)
 {
-	for (var i in config.shadows)
-	{
-		if(topic == config.shadows[i].thingTopic)
+	if(typeof(message) != "undefined") 
+	{//acounting for broken messages
+		for (var i in config.shadows)
 		{
-			const msgJson = JSON.parse(message.toString());
-			var payload = {};
-			payload["deviceId"] = config.shadows[i].deviceId;
-			payload["time"] = getDateTime();
-			
-			for(var o in config.shadows[i].payloadChunks)
+			if(topic == config.shadows[i].thingTopic)
 			{
-				var p = config.shadows[i].payloadChunks[o];			
-				payload[p.shadowId] = msgJson[p.thingId];
-			};
+				const msgJson = JSON.parse(message.toString());
+				var payload = {};
+				payload["deviceId"] = config.shadows[i].deviceId;
+				payload["time"] = getDateTime();
 				
-			var shadowJson = 
-			{
-				"state":
-				{	
-					"reported": payload
-				}
-			};
-			shadowConnections[i].publish(config.shadows[i].updateTopic,JSON.stringify(shadowJson));
+				for(var o in config.shadows[i].payloadChunks)
+				{
+					var p = config.shadows[i].payloadChunks[o];	
+					if(!(p.thingId in msgJson)) 
+					{ //in case of missing data put -1
+						payload[p.shadowId] = -1;
+					}
+					else
+					{
+						payload[p.shadowId] = msgJson[p.thingId];
+					}
+				};
+					
+				var shadowJson = 
+				{
+					"state":
+					{	
+						"reported": payload
+					}
+				};
+				shadowConnections[i].publish(config.shadows[i].updateTopic,JSON.stringify(shadowJson));
+			}
 		}
 	}
 }
