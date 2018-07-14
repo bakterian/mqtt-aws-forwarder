@@ -32,7 +32,16 @@ function forwardThingPub(topic, message)
 		{
 			if(topic == config.shadows[i].thingTopic)
 			{
-				const msgJson = JSON.parse(message.toString());
+				var msgJson;		
+				try
+				{
+					msgJson = JSON.parse(message.toString());
+				}
+				catch(e)
+				{
+					console.log("Error was captured during parsing: " + e.message);
+					continue;
+				}
 				var payload = {};
 				payload["deviceId"] = config.shadows[i].deviceId;
 				payload["time"] = getDateTime();
