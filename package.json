@@ -16,8 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/bakterian/mqtt-aws-forwarder.git"
   },
-  "keywords": 
-  [
+  "keywords": [
     "mqtt",
     "forwader",
     "mqtt-aws"
