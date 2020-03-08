@@ -4,7 +4,9 @@
   "description": "MQTT things data to AWS shadow forwader",
   "main": "mqttForwarder.js",
   "dependencies": {
+    "argparse": "^1.0.10",
     "aws-iot-device-sdk": "^2.2.1",
+    "fs": "0.0.1-security",
     "moment-timezone": "^0.5.17",
     "mqtt": "^2.15.1"
   },
@@ -16,8 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/bakterian/mqtt-aws-forwarder.git"
   },
-  "keywords": 
-  [
+  "keywords": [
     "mqtt",
     "forwader",
     "mqtt-aws"
