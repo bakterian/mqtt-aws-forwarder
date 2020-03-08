@@ -1,0 +1,71 @@
+{
+  "time": {
+    "zone": "Europe/Warsaw",
+    "fotmat": "YYYY-MM-DD HH:mm:ss ZZ"
+  },
+  "thingsBroker": {
+    "url": "brokerUrl",
+    "options": {
+      "port": 3033,
+      "username": "brokerUserName",
+      "password": "brokerPass",
+      "protocolVersion": 4
+    }
+  },
+  "shadows": [
+    {
+      "deviceId": "deviceId",
+      "thingTopic": "AddthingsTopic",
+      "updateTopic": "shadowUpdateTopic",
+      "updateAcceptedTopic": "shadowUpdateAcceptedTopic",
+      "updateRejectedTopic": "shadowUpdateRejectedTopic",
+      "brokerOptions": {
+        "keyPath": "aws private key location",
+        "certPath": "aws cert key location",
+        "caPath": "aws root-ca key location",
+        "host": "broker url"
+      },
+      "payloadChunks": [
+        {
+          "shadowId": "shadowId1",
+          "thingId": "thingId1"
+        },
+        {
+          "shadowId": "shadowId2",
+          "thingId": "thingId2"
+        },
+        {
+          "shadowId": "shadowId3",
+          "thingId": "thingId3"
+        }
+      ]
+    },
+    {
+      "deviceId": "SecondDdevice",
+      "thingTopic": "AddthingsTopic",
+      "updateTopic": "shadowUpdateTopic",
+      "updateAcceptedTopic": "shadowUpdateAcceptedTopic",
+      "updateRejectedTopic": "shadowUpdateRejectedTopic",
+      "brokerOptions": {
+        "keyPath": "aws private key location",
+        "certPath": "aws cert key location",
+        "caPath": "aws root-ca key location",
+        "host": "broker url"
+      },
+      "payloadChunks": [
+        {
+          "shadowId": "shadowId1",
+          "thingId": "thingId1"
+        },
+        {
+          "shadowId": "shadowId2",
+          "thingId": "thingId2"
+        },
+        {
+          "shadowId": "shadowId3",
+          "thingId": "thingId3"
+        }
+      ]
+    }
+  ]
+}

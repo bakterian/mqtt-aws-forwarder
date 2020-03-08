@@ -2,10 +2,19 @@
 var mqtt = require('mqtt');
 var awsDeviceModule = require('aws-iot-device-sdk/device');
 var moment = require('moment-timezone');
-var config = require('../CONFIG/mqttForwarderConfig');
+const argParser = require('./argParser').parser;
+const fs = require('fs');
 // =======================================================================
 
 // ============================ GLOBALS ==================================
+const args = argParser.parseArgs();
+const configFileRaw = fs.readFileSync(args.config, 'utf-8');
+var config = JSON.parse(configFileRaw);
+
+/* Store object in a JSON file synchronisly */ 
+//const jsonString = JSON.stringify(testObj, null, 2)
+//fs.writeFileSync('./out.json', jsonString)
+
 var shadowConnections = [];
 var i;
 for (i in config.shadows)

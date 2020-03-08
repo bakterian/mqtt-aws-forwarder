@@ -27,5 +27,5 @@ Update the config file location in the main mqttFowarder.js file.
 ## How to run
 Open shell or the windows cmd, cd inside and type:
 ```js
-node mqttForwarder.js
+node mqttForwarder.js -c <PATH_TO_CONFIG_FILE>
 ```
