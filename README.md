@@ -5,7 +5,7 @@ This node js application comes in handy when not all of your things comply with
 the AWS topic and json formatting specification and a the things code will not be changed.
 
 What this tool does is to subscribe on Thing topics and forward these messages via MQTT
-to the IOT Shadow devices.
+to the IOT Shadow devices. Supports forwarding of nested json values.
 
 ## Release 1.0.0
 Initial release of code and configuration examplews.

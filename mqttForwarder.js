@@ -33,6 +33,64 @@ function getDateTime()
     return moment().tz(config.time.zone).format(config.time.format);
 }
 
+function isDictionary(obj)
+{
+   return ((typeof obj==='object') && 
+           (obj!==null) && 
+           (!Array.isArray(obj)) && 
+           (!(obj instanceof Date)));
+}
+
+function getPayloadChunk(pathPieces, obj)
+{
+  var res = -1;
+
+  if((typeof(obj) != "undefined") &&
+      (Array.isArray(pathPieces)) &&
+      (pathPieces.length > 0))
+  {
+    var searchedPiece = pathPieces[0];
+    if(isDictionary(obj))
+    {
+      for(let [k, v] of Object.entries(obj))
+      {
+        if(k == searchedPiece)
+        {
+          if(pathPieces.length == 1)
+          {//found the payload chunk
+            res = v;
+          }
+          else
+          { //remove one piece from the array and recurse deeper
+            pathPieces.shift()
+            res = getPayloadChunk(pathPieces, v)
+          }
+        }
+        if(res != -1) break;
+      }
+    }
+    else if(Array.isArray(obj))
+    {
+      for(var i in obj)
+      { //verify all array elements
+        res = getPayloadChunk(pathPieces, obj[i])
+        if(res != -1) break;
+      }
+    }
+    else
+    {
+      console.log("[getPayloadChunk()] error obj type: " + typeof(obj))
+    }
+  }
+
+  else
+  {
+    console.log("[getPayloadChunk()] wrong input args.")
+  }
+
+  return res;
+}
+
 function forwardThingPub(topic, message)
 {
 	if(typeof(message) != "undefined") 
@@ -57,17 +115,11 @@ function forwardThingPub(topic, message)
 				
 				for(var o in config.shadows[i].payloadChunks)
 				{
-					var p = config.shadows[i].payloadChunks[o];	
-					if(!(p.thingId in msgJson)) 
-					{ //in case of missing data put -1
-						payload[p.shadowId] = -1;
-					}
-					else
-					{
-						payload[p.shadowId] = msgJson[p.thingId];
-					}
+					var payloadChunk = config.shadows[i].payloadChunks[o];
+					var chunkPathPieces = payloadChunk.thingId.split('.');
+					payload[payloadChunk.shadowId] = getPayloadChunk(chunkPathPieces, msgJson);
 				};
-					
+				
 				var shadowJson = 
 				{
 					"state":
