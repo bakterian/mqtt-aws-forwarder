@@ -52,10 +52,10 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin # modify if you need
 
-DAEMON_ARGS="/home/pi/0_PublicHub/0_GIT/mqtt-aws-forwarder/mqttForwarder.js -c /home/pi/0_PublicHub/0_GIT/CONFIG/RaspiBroker/mqttForwarderRaspiNodes.json"               # path to your node.js server/app
+DAEMON_ARGS="/home/pi/0_PublicHub/0_GIT/mqtt-aws-forwarder/mqttForwarder.js -c /home/pi/0_PublicHub/0_GIT/CONFIG/TTNBroker/mqttForwarderTtnNodes.json"               # path to your node.js server/app
                                             # NB: don't use ~/ in path
 
-DESC="Mqtt things data to AWS forwarder"    # whatever fancy description you like
+DESC="The Things Networkork Broker Mqtt things data to AWS forwarder"    # whatever fancy description you like
 
 NODEUSER=root:root	                        # USER who OWNS the daemon process (no matter whoever runs the init script)
                                             # user:group (if no group is specified, the primary GID for that user is used)
