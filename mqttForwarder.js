@@ -43,14 +43,14 @@ function isDictionary(obj)
 
 function getPayloadChunk(pathPieces, obj)
 {
-  var res = -1;
+  var res = {isValid: false, val: -1};
 
   if((typeof(obj) != "undefined") &&
       (Array.isArray(pathPieces)) &&
       (pathPieces.length > 0))
   {
     var searchedPiece = pathPieces[0];
-    if(isDictionary(obj))
+		if(isDictionary(obj))
     {
       for(let [k, v] of Object.entries(obj))
       {
@@ -58,7 +58,8 @@ function getPayloadChunk(pathPieces, obj)
         {
           if(pathPieces.length == 1)
           {//found the payload chunk
-            res = v;
+            res.isValid = true;
+            res.val = v;
           }
           else
           { //remove one piece from the array and recurse deeper
@@ -66,7 +67,7 @@ function getPayloadChunk(pathPieces, obj)
             res = getPayloadChunk(pathPieces, v)
           }
         }
-        if(res != -1) break;
+        if( res.isValid == true ) break;
       }
     }
     else if(Array.isArray(obj))
@@ -74,7 +75,7 @@ function getPayloadChunk(pathPieces, obj)
       for(var i in obj)
       { //verify all array elements
         res = getPayloadChunk(pathPieces, obj[i])
-        if(res != -1) break;
+        if( res.isValid == true ) break;
       }
     }
     else
@@ -90,6 +91,7 @@ function getPayloadChunk(pathPieces, obj)
 
   return res;
 }
+
 
 function forwardThingPub(topic, message)
 {
@@ -112,22 +114,40 @@ function forwardThingPub(topic, message)
 				var payload = {};
 				payload["deviceId"] = config.shadows[i].deviceId;
 				payload["time"] = getDateTime();
-				
+				var errorFound = false;
+
 				for(var o in config.shadows[i].payloadChunks)
 				{
 					var payloadChunk = config.shadows[i].payloadChunks[o];
 					var chunkPathPieces = payloadChunk.thingId.split('.');
-					payload[payloadChunk.shadowId] = getPayloadChunk(chunkPathPieces, msgJson);
-				};
-				
-				var shadowJson = 
-				{
-					"state":
-					{	
-						"reported": payload
+					var payloadChunkValue = getPayloadChunk(chunkPathPieces, msgJson);
+					if(payloadChunkValue.isValid == false)
+					{
+						var currTime = getDateTime();
+						console.log("[ERROR] captured at " + currTime + "\nTopic: " + topic + "\nMessage: " + message +
+                       "\nWhile searching for the value of chunk: " + payloadChunk.thingId);
+            errorFound = true;
+            break;
 					}
+					payload[payloadChunk.shadowId] = payloadChunkValue.val;
 				};
-				shadowConnections[i].publish(config.shadows[i].updateTopic,JSON.stringify(shadowJson));
+
+				if(errorFound == false)
+        {
+					var shadowJson = 
+					{
+						"state":
+						{	
+							"reported": payload
+						}
+					};
+					shadowConnections[i].publish(config.shadows[i].updateTopic,JSON.stringify(shadowJson));
+        }
+        else
+        {
+          console.log("No publishing because errors in message payload have been found.");
+				}
+				
 			}
 		}
 	}
